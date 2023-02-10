@@ -5,7 +5,16 @@ const dataFile = process.cwd() + "/data/product.json"
 
 
 exports.create = (request, response) => {
-    const { productName } = request.body;
+    const {
+        productName,
+        categoryId,
+        price,
+        thumbImage,
+        images,
+        salePercent,
+        quantity,
+        desc,
+    } = request.body;
 
     fs.readFile(dataFile, "utf-8", (err, data) => {
 
@@ -15,7 +24,7 @@ exports.create = (request, response) => {
         const parsedData = data ? JSON.parse(data) : [];
 
 
-        const newObj = { id: uuid.v4(), productName: "", price: 0, images: [], thumbImage: "", categoryId: 0, salePercent: 0, quantity: 0, desc: "", createdDate: Date.now() }
+        const newObj = { id: uuid.v4(), productName, price, categoryId, thumbImage, images, salePercent, quantity, desc, createdDate: Date.now() }
 
         parsedData.push(newObj)
 
