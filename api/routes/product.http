@@ -1,0 +1,36 @@
+###
+
+POST http://localhost:8000/api/product
+Content-Type: application/json
+
+{
+     "productName": "Huuhdiin gaduur huwtsas",
+     "price" : "$65",
+    "salePercent": "3$"
+}
+
+###
+
+PUT http://localhost:8000/api/product/
+Content-Type: application/json
+
+{
+     "productName": "Gaduur kurtka"
+}
+
+
+###
+
+DELETE http://localhost:8000/api/product/id
+
+
+
+
+###
+GET  http://localhost:8000/api/product
+Content-Type: application/json
+
+
+###
+GET  http://localhost:8000/api/product/id
+Content-Type: application/json

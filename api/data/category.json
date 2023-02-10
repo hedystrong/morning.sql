@@ -1,0 +1,18 @@
+[
+    {
+        "id": "16e04710-585c-43a6-8094-d1b411b2ae60",
+        "categoryName": "Clothes",
+        "createdDate": 1675998332684
+    },
+    {
+        "id": "5e224d43-374d-4683-a61a-f07f59aa28cf",
+        "categoryName": "Clothes-Test",
+        "createdDate": 1675998338875,
+        "updatedDate": 1675998721166
+    },
+    {
+        "id": "3bcd78f3-d02a-410d-9d56-539db59a3ce7",
+        "categoryName": "Test",
+        "createdDate": 1675998705734
+    }
+]
