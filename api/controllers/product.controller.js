@@ -83,7 +83,7 @@ exports.getOne = (request, response) => {
 
 exports.update = (request, response) => {
     const { id } = request.params;
-    const { productName } = request.body;
+    const { productName, price, image, thumbImage, categoryId, salePercent, quantity, desc } = request.body;
     fs.readFile(dataFile, "utf-8", (readErr, data) => {
         if (readErr) {
             return response.json({ status: false, message: readErr });
@@ -125,7 +125,7 @@ exports.delete = (request, response) => {
                 return response.json({ status: false, message: writeErr });
             }
 
-            return response.json({ status: true, message: "Success delete" });
+            return response.json({ status: true, message: "Success delete", result: deletedData });
         });
     });
 };

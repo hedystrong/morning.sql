@@ -4,7 +4,7 @@ POST http://localhost:8000/api/category
 Content-Type: application/json
 
 {
-     "categoryName": "Test"
+     "categoryName": "Dining table"
 }
 
 ###
@@ -19,7 +19,7 @@ Content-Type: application/json
 
 ###
 
-DELETE http://localhost:8000/api/category/c437190d-6ad8-44ed-8b20-70ef7494c24f
+DELETE http://localhost:8000/api/category/da0110fe-74e0-45df-bf4d-20b45cd99b0e
 
 
 

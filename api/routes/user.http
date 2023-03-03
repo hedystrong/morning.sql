@@ -1,0 +1,40 @@
+###
+
+POST http://localhost:8000/api/user
+Content-Type: application/json
+
+{
+     "firsname": "Test",
+     "lastname":"Test",
+     "username":"test",
+     "password":"wefwf",
+     "email":"test"
+
+}
+
+###
+POST http://localhost:8000/api/user/
+Content-Type: application/json
+
+{
+     "userName": "Amar",
+     "age":9
+}
+
+
+###
+GET http://localhost:8000/api/user?limit=10
+
+###
+GET http://localhost:8000/api/user/101
+
+###
+PUT http://localhost:8000/api/user/100
+Content-Type: application/json
+
+{
+     "userName" : "Haliunaa"
+}
+
+ ###
+GET http://localhost:8000/api/user/101
