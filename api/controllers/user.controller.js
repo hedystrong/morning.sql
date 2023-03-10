@@ -33,18 +33,12 @@ exports.getOne = async (request, response) => {
         console.log(err);
         response.json({ status: false, message: err })
     }
-
-
-
-
 };
 
 exports.create = async (request, response) => {
     const { userName, age } = request.body;
 
     const newObj = {
-
-
         userName,
         age
     };

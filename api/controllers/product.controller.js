@@ -2,130 +2,109 @@ const fs = require("fs")
 const uuid = require("uuid");
 
 const dataFile = process.cwd() + "/data/product.json"
+const productService = require("../model/product-service")
 
+exports.create = async (request, response) => {
+    const { categoryId, price, productName, quantityInStock, thumbImage, brandId, descriptions, salePercent, saleFinishDate, createtAt } = request.body;
 
-exports.create = (request, response) => {
-    const {
-        productName,
+    const newObj = {
         categoryId,
         price,
+        productName,
+        quantityInStock,
         thumbImage,
-        images,
+        brandId,
+        descriptions,
         salePercent,
-        quantity,
-        desc,
-    } = request.body;
+        saleFinishDate,
+        createtAt
+    };
 
-    fs.readFile(dataFile, "utf-8", (err, data) => {
-
-        if (err) {
-            return response.json({ status: false, message: err })
-        }
-        const parsedData = data ? JSON.parse(data) : [];
-
-
-        const newObj = { id: uuid.v4(), productName, price, categoryId, thumbImage, images, salePercent, quantity, desc, createdDate: Date.now() }
-
-        parsedData.push(newObj)
-
-        fs.writeFile(dataFile, JSON.stringify(parsedData), (err) => {
-            if (err) {
-                return response.json({ status: false, message: err })
-            }
-            return response.json({ status: true, message: "Success" });
-
-        })
-
-
-    })
-
-}
-
-exports.getAll = (request, response) => {
-    fs.readFile(dataFile, "utf-8", (readErr, data) => {
-        if (readErr) {
-            return response.json({ status: false, message: readErr });
+    try {
+        const result = await productService.createProduct(newObj);
+        console.log(result);
+        if (result && result.affectedRows > 0) {
+            response.json({ status: true, message: "Success" })
+        } else {
+            response.json({ status: false, message: "Nemehed aldaa garlaa" })
         }
 
-        const savedData = data ? JSON.parse(data) : [];
-
-        return response.json({ status: true, result: savedData });
-    });
-};
-
-exports.getOne = (request, response) => {
-    const { id } = request.params;
-
-    if (!id) {
-        return response.json({ status: false, message: "id not found" });
+    } catch (err) {
+        response.json({ status: false, message: err })
     }
 
-    fs.readFile(dataFile, "utf-8", (readErr, data) => {
-        if (readErr) {
-            return response.json({ status: false, message: readErr });
+
+};
+
+
+
+exports.getAll = async (request, response) => {
+    const { limit } = request.query;
+    try {
+        const result = await productService.getProduct(limit);
+        if (result.length > 0) {
+            response.json({ status: true, result })
         }
 
-        const savedData = JSON.parse(data);
+    } catch (err) {
+        console.log(err);
+        response.json({ status: false, message: err })
+    }
 
-        const oneCategory = savedData.find(item => item.id == id)
+};
 
-        if (oneCategory) {
-            return response.json({ status: true, result: oneCategory });
+exports.getOne = async (request, response) => {
+    const { id } = request.params;
+
+    if (!id)
+        return response.json({ status: false, message: "product id not found" });
+
+    try {
+        const result = await productService.getProduct(id);
+        response.json({ status: true, result });
+
+
+    } catch (err) {
+        console.log(err);
+        response.json({ status: false, message: err })
+    }
+};
+
+
+
+
+exports.update = async (request, response) => {
+    const { id } = request.params;
+    if (!id)
+        return response.json({ status: false, message: "product id not found" });
+    try {
+        const result = await productService.updateProduct(id, request.body);
+        console.log(result);
+        if (result.length > 0 && result[0].affectedRows > 0) {
+            response.json({ status: true, message: "Success" })
         } else {
-            return response.json({ status: false, message: "product not found" });
+            response.json({ status: true, message: "Nemehed aldaa garlaa" })
         }
 
-
-    });
+    } catch (err) {
+        response.json({ status: false, message: err })
+    }
 };
 
-
-
-exports.update = (request, response) => {
+exports.delete = async (request, response) => {
     const { id } = request.params;
-    const { productName, price, image, thumbImage, categoryId, salePercent, quantity, desc } = request.body;
-    fs.readFile(dataFile, "utf-8", (readErr, data) => {
-        if (readErr) {
-            return response.json({ status: false, message: readErr });
+    if (!id)
+        return response.json({ status: false, message: "product id not found" });
+    try {
+        const result = await productService.deleteProduct(id);
+        console.log(result, "controller");
+        if (result && result.affectedRows > 0) {
+            response.json({ status: true, message: "Success" })
+        } else {
+            response.json({ status: false, message: "Ustgahad aldaa garlaa" })
         }
 
-        const parsedData = data ? JSON.parse(data) : [];
-
-        const updateData = parsedData.map((productObj) => {
-            if (productObj.id == id) {
-                return { ...productObj, productName, price, image, thumbImage, categoryId, salePercent, quantity, desc, updatedDate: Date.now() };
-            } else {
-                return productObj;
-            }
-        });
-
-        fs.writeFile(dataFile, JSON.stringify(updateData), (writeErr) => {
-            if (writeErr) {
-                return response.json({ status: false, message: writeErr });
-            }
-
-            return response.json({ status: true, message: "Success update" });
-        });
-    });
-};
-
-exports.delete = (request, response) => {
-    const { id } = request.params;
-    fs.readFile(dataFile, "utf-8", (readErr, data) => {
-        if (readErr) {
-            return response.json({ status: false, message: readErr });
-        }
-
-        const parsedData = data ? JSON.parse(data) : [];
-
-        const deletedData = parsedData.filter((e) => e.id != id);
-
-        fs.writeFile(dataFile, JSON.stringify(deletedData), (writeErr) => {
-            if (writeErr) {
-                return response.json({ status: false, message: writeErr });
-            }
-
-            return response.json({ status: true, message: "Success delete", result: deletedData });
-        });
-    });
+    } catch (err) {
+        response.json({ status: false, message: err })
+    }
 };
